@@ -1,10 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-dotenv.config({ path: "./.env" });
+// import dotenv from "dotenv";
+// dotenv.config({ path: "./.env" });
 
 import { registerValidation, loginValidation } from "./validations/auth.js";
 
