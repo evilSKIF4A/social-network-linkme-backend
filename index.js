@@ -28,14 +28,13 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: true,
-    credentials: true,
+    origin: "*",
+    methods: ["GET", "POST"],
   },
-  allowEIO3: true,
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 app.post("/auth/login", loginValidation, UserController.login);
 app.post("/auth/register", registerValidation, UserController.register);
