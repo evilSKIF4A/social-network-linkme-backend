@@ -24,13 +24,6 @@ export const getMessage = async (req, res) => {
 
 export const postMessage = async (req, res) => {
   try {
-    if (req.params.messageText.trim() == "") {
-      res.json({
-        message: "Пустое сообщение",
-      });
-      return;
-    }
-
     const chatId = req.params.chatId;
     const doc = new MessageModel({
       authorId: req.params.userId,
