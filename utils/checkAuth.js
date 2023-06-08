@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
-// import dotenv from "dotenv";
 
 export default (req, res, next) => {
   const token = (req.headers.authorization || "").replace(/Bearer\s?/, "");
-  // dotenv.config({ path: "./.env" });
 
   if (token) {
     try {
