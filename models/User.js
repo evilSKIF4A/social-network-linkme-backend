@@ -24,6 +24,7 @@ const UserSchema = new mongoose.Schema(
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   },
   {
     timestamps: true,
