@@ -1,4 +1,5 @@
 import PostModel from "../models/Post.js";
+import UserModel from "../models/User.js";
 
 export const getPost = async (req, res) => {
   try {
@@ -46,12 +47,21 @@ export const removePost = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     const doc = new PostModel({
-      text: req.params.text,
-      imageUrl: req.params.imageUrl,
-      authorId: req.params.authorId,
+      text: req.body.text,
+      imageUrl: req.body.imageUrl || "",
+      authorId: req.body.authorId,
     });
 
     const post = await doc.save();
+
+    await UserModel.findByIdAndUpdate(
+      {
+        _id: req.body.userId,
+      },
+      {
+        $push: { posts: post._id },
+      }
+    );
 
     res.json(post);
   } catch (err) {
@@ -71,9 +81,9 @@ export const updatePost = async (req, res) => {
         _id: postId,
       },
       {
-        text: req.params.text,
-        imageUrl: req.params.imageUrl,
-        authorId: req.params.authorId,
+        text: req.body.text,
+        imageUrl: req.body.imageUrl,
+        authorId: req.body.authorId,
       }
     );
 
