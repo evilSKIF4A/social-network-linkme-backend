@@ -265,7 +265,6 @@ export const findUsers = async (req, res) => {
 export const updateFoto = async (req, res) => {
   try {
     const url = req.params.avatarUrl.replaceAll(" ", "/");
-    console.log(url);
     await UserModel.findByIdAndUpdate(
       {
         _id: req.userId,
@@ -279,6 +278,28 @@ export const updateFoto = async (req, res) => {
       message: "Фотография была изменена",
     });
   } catch {
+    console.log(err);
+    res.status(500).json({
+      message: "Нет доступа",
+    });
+  }
+};
+
+export const updateDescription = async (req, res) => {
+  try {
+    const textDesc = req.params.textDesc;
+    await UserModel.findByIdAndUpdate(
+      {
+        _id: req.userId,
+      },
+      {
+        $set: { description: textDesc },
+      }
+    );
+    res.json({
+      message: "Фотография была изменена",
+    });
+  } catch (err) {
     console.log(err);
     res.status(500).json({
       message: "Нет доступа",
