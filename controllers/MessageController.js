@@ -27,7 +27,7 @@ export const postMessage = async (req, res) => {
     const chatId = req.params.chatId;
     const doc = new MessageModel({
       authorId: req.params.userId,
-      message: req.params.messageText.toString(),
+      message: req.params.messageText,
     });
 
     const newMessage = await doc.save();
