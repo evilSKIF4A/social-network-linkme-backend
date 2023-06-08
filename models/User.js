@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     avatarUrl: String,
+    description: String,
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     chats: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
