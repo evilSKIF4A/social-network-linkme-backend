@@ -7,13 +7,16 @@ import { Server } from "socket.io";
 // dotenv.config({ path: "./.env" });
 
 import { registerValidation, loginValidation } from "./validations/auth.js";
+import { postCreateValidation } from "./validations/post.js";
 
 import * as UserController from "./controllers/UserController.js";
 import * as ChatController from "./controllers/ChatController.js";
 import * as MessageController from "./controllers/MessageController.js";
+import * as PostController from "./controllers/PostController.js";
 
 import checkAuth from "./utils/checkAuth.js";
 import isFriend from "./utils/isFriend.js";
+import handleValidationErrors from "./utils/handleValidationErrors.js";
 
 mongoose
   .connect(process.env.URL_DB)
@@ -36,8 +39,18 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
-app.post("/auth/login", loginValidation, UserController.login);
-app.post("/auth/register", registerValidation, UserController.register);
+app.post(
+  "/auth/login",
+  loginValidation,
+  handleValidationErrors,
+  UserController.login
+);
+app.post(
+  "/auth/register",
+  registerValidation,
+  handleValidationErrors,
+  UserController.register
+);
 app.get("/auth/me", checkAuth, UserController.getMe);
 
 app.get("/chats", checkAuth, ChatController.showChats); // вывод всех чатов
@@ -69,6 +82,27 @@ app.patch(
 );
 
 app.post("/update/foto/:avatarUrl", checkAuth, UserController.updateFoto);
+app.post(
+  "/update/description/:textDesc",
+  checkAuth,
+  UserController.updateDescription
+);
+
+app.get("/post/:postId", PostController.getPost);
+app.post(
+  "/post/create",
+  checkAuth,
+  postCreateValidation,
+  PostController.createPost
+);
+app.delete("/post/:id", checkAuth, PostController.removePost);
+app.patch(
+  "/post/:id",
+  checkAuth,
+  postCreateValidation,
+  handleValidationErrors,
+  PostController.updatePost
+);
 
 let users = []; // пользователи в сети
 
@@ -100,6 +134,11 @@ io.on("connection", (socket) => {
         senderId,
         text,
       });
+  });
+
+  socket.on("setNewConversation", ({ receiverId, chatId }) => {
+    const user = getUser(receiverId);
+    user && io.to(user.socketId).emit("getNewConversation", { chatId });
   });
 
   socket.on("disconnect", () => {
