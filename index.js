@@ -100,7 +100,6 @@ app.patch(
   "/post/:id",
   checkAuth,
   postCreateValidation,
-  handleValidationErrors,
   PostController.updatePost
 );
 
