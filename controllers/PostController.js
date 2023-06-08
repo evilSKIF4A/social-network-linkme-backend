@@ -46,7 +46,6 @@ export const removePost = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     const doc = new PostModel({
-      title: req.body.title,
       text: req.body.text,
       imageUrl: req.body.imageUrl,
       authorId: req.body.authorId,
@@ -72,7 +71,6 @@ export const updatePost = async (req, res) => {
         _id: postId,
       },
       {
-        title: req.body.title,
         text: req.body.text,
         imageUrl: req.body.imageUrl,
         authorId: req.body.authorId,
