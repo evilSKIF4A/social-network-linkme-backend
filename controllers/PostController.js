@@ -3,20 +3,7 @@ import PostModel from "../models/Post.js";
 export const getPost = async (req, res) => {
   try {
     const postId = req.params.postId;
-    const post = await PostModel.findById(postId).populate("authorId").exec();
-    res.json(post);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "Не удалось получить статьи",
-    });
-  }
-};
-
-export const incViews = async (req, res) => {
-  try {
-    const postId = req.params.id;
-    PostModel.findOneAndUpdate(
+    const post = await PostModel.findByIdAndUpdate(
       {
         _id: postId,
       },
@@ -26,10 +13,10 @@ export const incViews = async (req, res) => {
       {
         returnDocument: "after",
       }
-    );
-    res.json({
-      success: true,
-    });
+    )
+      .populate("authorId")
+      .exec();
+    res.json(post);
   } catch (err) {
     console.log(err);
     res.status(500).json({
